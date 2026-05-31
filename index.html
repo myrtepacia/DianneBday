@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Made For Dianne 🎁</title>
+<meta content="en-US" name="language"/>
+<meta content="A birthday website for Dianne with the original countdown restored and cleaned local-only code." name="description"/>
+<link href="image/logo.png" rel="icon" type="image/png"/>
+<link href="image/logo.png" rel="apple-touch-icon"/>
+<meta content="Made For Dianne 🎁" property="og:title"/>
+<meta content="A birthday website for Dianne with the original countdown restored and cleaned local-only code." property="og:description"/>
+<meta content="image/logo.png" property="og:image"/>
+<meta content="website" property="og:type"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Made For Dianne 🎁" name="twitter:title"/>
+<meta content="A birthday website for Dianne with the original countdown restored and cleaned local-only code." name="twitter:description"/>
+<meta content="image/birthday-gift.jpg" name="twitter:image"/>
+<link href="css/index.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Pacifico&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+
+
+<canvas id="matrix-rain" style="display: none;"></canvas>
+<canvas class="canvas" style="position:absolute;width:100%;height:100%;z-index:9999;display:none;"></canvas>
+<div class="overlay">
+<div class="stars-container" id="starsContainer"></div>
+<img id="gift-image" src="image/happy3.gif" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; max-width: 80%; max-height: 80%;">
+<div class="content-display" id="contentDisplay">
+<p id="contentText"></p>
+</div>
+<div class="firework-container" id="fireworkContainer"></div>
+<div class="book-container">
+<div class="book" id="book"></div>
+</div>
+<button class="music-control" id="musicControl" title="Play/Pause Music">
+            ▶
+        </button>
+<button class="settings-button" id="settingsButton" style="display: none;" title="Settings">
+            ⚙
+        </button>
+<div class="settings-hint" id="settingsHint">
+<div class="hint-text" data-i18n="settingsHint" style="display: none;">Click here to customize the settings</div>
+</div>
+<div class="modal" id="settingsModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 data-i18n="settings">⚙️ Website Settings</h2>
+<span class="close">×</span>
+</div>
+<div class="modal-body">
+<div class="settings-section">
+<h3 data-i18n="music">🎵 Music Settings</h3>
+<div class="form-group">
+<label data-i18n="backgroundMusic" for="backgroundMusic">Background Music:</label>
+<div class="music-select-row">
+<select id="backgroundMusic">
+<option disabled="" selected="" value="">Loading music list...</option>
+</select>
+<button class="music-preview-btn" id="musicPreviewButton" type="button">▶ Preview</button>
+</div>
+<span class="music-preview-status" id="musicPreviewStatus">Choose a song and press "Preview"</span>
+</div>
+</div>
+<div class="settings-section" id="countdownSection">
+<h3 data-i18n="countdown">⏰ Countdown Settings</h3>
+<div class="form-group">
+<label data-i18n="countdownTime" for="countdownTime">Countdown Time:</label>
+<select id="countdownTime">
+<option data-i18n="sec3" value="3">3 seconds</option>
+<option data-i18n="sec5" value="5">5 seconds</option>
+<option data-i18n="sec10" value="10">10 seconds</option>
+</select>
+</div>
+</div>
+<div class="settings-section">
+<h3 data-i18n="matrix">🌧️ Matrix Rain Settings</h3>
+<div class="form-group">
+<label data-i18n="matrixText" for="matrixText">Matrix main text:</label>
+<input data-i18n-placeholder="matrixText" id="matrixText" placeholder="Enter the text for the matrix rain effect" type="text" value="HAPPYBIRTHDAY"/>
+</div>
+<div class="form-group">
+<label data-i18n="colorTheme">Choose a color:</label>
+<div class="color-theme-buttons">
+<button class="color-theme-btn active" data-theme="pink" type="button">
+<div class="color-preview pink-preview"></div>
+<span data-i18n="pinkTheme">Sweet Pink</span>
+</button>
+<button class="color-theme-btn" data-theme="blue" type="button">
+<div class="color-preview blue-preview"></div>
+<span data-i18n="blueTheme">Cool Blue</span>
+</button>
+<button class="color-theme-btn" data-theme="purple" type="button">
+<div class="color-preview purple-preview"></div>
+<span data-i18n="purpleTheme">Dreamy Purple</span>
+</button>
+<button class="color-theme-btn" data-theme="custom" type="button">
+<div class="color-preview custom-preview"></div>
+<span data-i18n="customTheme">Custom Color</span>
+</button>
+</div>
+</div>
+<div class="form-row" id="customColorSection" style="display: none;">
+<div class="form-group">
+<label data-i18n="matrixColor1" for="matrixColor1">Matrix color 1:</label>
+<input id="matrixColor1" type="color" value="#ff69b4"/>
+</div>
+<div class="form-group">
+<label data-i18n="matrixColor2" for="matrixColor2">Matrix color 2:</label>
+<input id="matrixColor2" type="color" value="#ff1493"/>
+</div>
+</div>
+</div>
+<div class="settings-section">
+<h3 data-i18n="sequence">✨ Main Text Settings</h3>
+<div class="form-group">
+<label data-i18n="sequenceText" for="sequenceText">Main text content:</label>
+<span data-i18n="noteSequence" style="color: rgb(132, 132, 132); font-weight: normal; font-size: 12px; display: block; margin-bottom: 5px;">
+                                Note: separate words with | and avoid making a line too long
+                            </span>
+<input data-i18n-placeholder="sequenceText" id="sequenceText" placeholder="Example: HAPPY|BIRTHDAY|DIANNE|..." type="text" value="HAPPY|BIRTHDAY|DIANNE|❤"/>
+</div>
+<div class="form-group" id="sequenceColorSection" style="display: none;">
+<label data-i18n="sequenceColor" for="sequenceColor">Main text color:</label>
+<input id="sequenceColor" type="color" value="#ff69b4"/>
+</div>
+</div>
+<div class="settings-section">
+<h3 data-i18n="gift">🎁 Animated Image Settings</h3>
+<div class="form-group">
+<label data-i18n="giftImage" for="giftImage">Animated image (optional):</label>
+<select id="giftImage">
+<option data-i18n="noGif" value="">None</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label data-i18n="enableBook" for="enableBook">Show book:</label>
+<select id="enableBook">
+<option data-i18n="on" value="true">On</option>
+<option data-i18n="off" value="false">Off</option>
+</select>
+</div>
+<div class="settings-section" id="bookSettingsSection">
+<h3 data-i18n="book">📖 Book Page Settings</h3>
+<div id="pageConfigs">
+</div>
+<div class="form-group">
+<label data-i18n="enableHeart" for="enableHeart">Show heart effect:</label>
+<select id="enableHeart">
+<option data-i18n="on" value="true">On</option>
+<option data-i18n="off" value="false">Off</option>
+</select>
+</div>
+</div>
+
+<button class="apply-settings-btn" data-i18n="apply" id="applySettings">🎉 Apply Settings</button>
+</div>
+</div>
+</div>
+<audio id="birthdayAudio" loop="">
+<source src="music/happy-birthday-uia-cat.mp3" type="audio/mpeg"/>
+            Your browser does not support the audio element.
+        </audio>
+<div id="orientation-lock">
+<div class="phone-icon">
+<img alt="" src="image/screen.png"/>
+</div>
+</div>
+<button id="fullscreenBtn" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 990010;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    background: #222;
+    color: #fff;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    display: none;
+">
+<img alt="" src="image/full.png" style="
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+"/>
+</button>
+
+<script src="lang.js"></script>
+<script src="jscp/settings.js"></script>
+<script src="jscp/ui.js"></script>
+</body>
+</html>
