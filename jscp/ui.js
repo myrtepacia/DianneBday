@@ -1025,7 +1025,8 @@ function createHeartPhotoCentered(idx, total) {
     const t = (idx / total) * 2 * Math.PI;
 
     const isLandscapeMobile = window.innerHeight <= 500 && window.innerWidth > window.innerHeight;
-    const scale = isLandscapeMobile ? 8 : 16;
+    const isPortraitMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && window.innerHeight > window.innerWidth;
+    const scale = isLandscapeMobile ? 8 : isPortraitMobile ? Math.min(window.innerWidth, window.innerHeight) * 0.022 : 16;
 
     const sin_t = Math.sin(t);
     const cos_t = Math.cos(t);
