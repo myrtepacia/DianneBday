@@ -40,68 +40,31 @@ function returnConfettiToPool(confetti) {
 
 
 function checkOrientation() {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const orientationLock = document.getElementById('orientation-lock');
     const matrixCanvas = document.getElementById('matrix-rain');
     const mainCanvas = document.querySelector('.canvas');
     const bookContainer = document.querySelector('.book-container');
     const book = document.getElementById('book');
 
-    if (!isMobile) {
-        isLandscape = true;
-        orientationLock.style.display = 'none';
-        matrixCanvas.style.display = 'block';
-        mainCanvas.style.display = 'block';
-        if (bookContainer) bookContainer.style.display = 'block';
-        if (book) book.style.display = 'block';
-        startWebsite();
-    } else {
-        const mediaQuery = window.matchMedia("(orientation: landscape)");
-        isLandscape = mediaQuery.matches;
+    // Always allow both portrait and landscape — no orientation lock on phones
+    isLandscape = true;
+    orientationLock.style.display = 'none';
+    matrixCanvas.style.display = 'block';
+    mainCanvas.style.display = 'block';
+    if (bookContainer) bookContainer.style.display = 'block';
+    if (book) book.style.display = 'block';
+    startWebsite();
 
-        if (isLandscape) {
-            orientationLock.style.display = 'none';
-            matrixCanvas.style.display = 'block';
-            mainCanvas.style.display = 'block';
-            if (bookContainer) bookContainer.style.display = 'block';
-            if (book) book.style.display = 'block';
-            startWebsite();
+    setTimeout(() => {
+        forceResizeMatrix();
+    }, 100);
 
-            setTimeout(() => {
-                forceResizeMatrix();
-            }, 100);
-        } else {
-            orientationLock.style.display = 'flex';
-            matrixCanvas.style.display = 'none';
-            mainCanvas.style.display = 'none';
-            if (bookContainer) bookContainer.style.display = 'none';
-            if (book) book.style.display = 'none';
-            stopWebsite();
-        }
-
-        mediaQuery.addEventListener('change', (e) => {
-            isLandscape = e.matches;
-            if (isLandscape) {
-                orientationLock.style.display = 'none';
-                matrixCanvas.style.display = 'block';
-                mainCanvas.style.display = 'block';
-                if (bookContainer) bookContainer.style.display = 'block';
-                if (book) book.style.display = 'block';
-                startWebsite();
-
-                setTimeout(() => {
-                    forceResizeMatrix();
-                }, 100);
-            } else {
-                orientationLock.style.display = 'flex';
-                matrixCanvas.style.display = 'none';
-                mainCanvas.style.display = 'none';
-                if (bookContainer) bookContainer.style.display = 'none';
-                if (book) book.style.display = 'none';
-                stopWebsite();
-            }
-        });
-    }
+    // Re-adjust on resize/rotation
+    window.addEventListener('resize', () => {
+        setTimeout(() => {
+            forceResizeMatrix();
+        }, 200);
+    });
 }
 function startWebsite() {
     if (!window.isWebsiteReady || !window.loadingFinished || window.websiteStarted) {
@@ -237,9 +200,7 @@ function initMatrixRain() {
 S = {
     initialized: false,
     init: function () {
-        if (!isLandscape && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            return;
-        }
+        // Portrait mode is now allowed — removed landscape-only guard
         var action = window.location.href,
             i = action.indexOf('?websiteId=');
 
@@ -504,7 +465,8 @@ S.UI = (function () {
 
     return {
         simulate: function (action) {
-            if (isLandscape || !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            // Portrait mode now allowed — run on all orientations
+            {
                 clearActionTimer();
                 sequence = typeof action === 'object' ? action.slice() : action.split('|');
                 runToken += 1;

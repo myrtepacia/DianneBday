@@ -1157,12 +1157,13 @@ const fullscreenBtn = document.getElementById('fullscreenBtn');
 fullscreenBtn.style.zIndex = 9009999;
 
 function updateFullscreenBtnVisibility() {
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (
         fullscreenBtn &&
-        isAndroid() &&
+        isMobileDevice &&
         !document.fullscreenElement
     ) {
-        fullscreenBtn.style.display = 'block';
+        fullscreenBtn.style.display = 'flex';
 
         if (fullscreenBtn.hideTimeout) clearTimeout(fullscreenBtn.hideTimeout);
         fullscreenBtn.hideTimeout = setTimeout(() => {
@@ -1195,20 +1196,11 @@ document.addEventListener('fullscreenchange', function () {
     updateFullscreenBtnVisibility();
 });
 function isLandscapeMode() {
-    return window.innerWidth > window.innerHeight;
+    return true; // Portrait mode now supported — always return true
 }
 
 function tryStartWebsiteWhenLandscape() {
     if (window.isWebsiteReady && typeof startWebsite === 'function') {
-        if (isLandscapeMode()) {
-            startWebsite();
-        } else {
-            window.addEventListener('resize', function onResize() {
-                if (isLandscapeMode()) {
-                    startWebsite();
-                    window.removeEventListener('resize', onResize);
-                }
-            });
-        }
+        startWebsite();
     }
 }

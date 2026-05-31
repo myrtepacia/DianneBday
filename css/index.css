@@ -1455,3 +1455,38 @@
   }
 
 
+
+  /* === Portrait / Phone mode fixes === */
+  @media screen and (orientation: portrait) {
+      .book-container.show {
+          transform: scale(0.55) translateY(60px);
+          transform-origin: top center;
+      }
+
+      .book {
+          width: 600px;
+          height: 400px;
+      }
+
+      .page {
+          width: 300px;
+          height: 400px;
+      }
+
+      .content-display {
+          width: 92vw;
+          top: 1%;
+          padding: 20px 18px;
+          min-height: 100px;
+          max-height: 160px;
+      }
+
+      .content-display p {
+          font-size: clamp(15px, 4vw, 20px);
+          line-height: 1.8;
+      }
+
+      #fullscreenBtn {
+          display: flex !important;
+      }
+  }
